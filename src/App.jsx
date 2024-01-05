@@ -34,7 +34,7 @@ export default function App() {
     >
       <div
         id="card-layout"
-        className="flex w-full max-w-[700px] flex-col gap-6"
+        className="flex w-full max-w-[700px] flex-col gap-6 min-w-fit"
       >
         <Header />
         <Searchbar setUser={setUser} />
