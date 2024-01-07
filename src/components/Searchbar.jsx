@@ -1,20 +1,16 @@
 import { MagnifyingGlassIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 export default function Searchbar({ setUser }) {
-  const [searchText, setSearchText] = useState("");
-
-  const onInputChange = (e) => {
-    setSearchText(e.target.value);
-  };
+  const inputRef = useRef();
 
   const onSearchClick = () => {
-    setUser(searchText);
+    setUser(inputRef.current.value);
   };
 
   const onKeyPress = (e) => {
     if (e.key === "Enter") {
-      setUser(searchText);
+      setUser(inputRef.current.value);
     }
   };
 
@@ -24,12 +20,12 @@ export default function Searchbar({ setUser }) {
       className="group relative flex h-14 w-full items-center rounded-lg bg-slate-200 text-black dark:bg-darkBlue dark:text-white"
     >
       <label htmlFor="textInput" className="absolute left-4">
-        <MagnifyingGlassIcon className="group-focus-within:text-yellow-500 size-6 text-blue-700 transition duration-300 hover:text-yellow-500" />
+        <MagnifyingGlassIcon className="size-6 text-blue-700 transition duration-300 hover:text-yellow-500 group-focus-within:text-yellow-500" />
       </label>
       <input
+        ref={inputRef}
         id="textInput"
         type="search"
-        onInput={onInputChange}
         onKeyPress={onKeyPress}
         className="h-full w-full rounded-lg bg-transparent pl-14 pr-24"
         placeholder="Search Github username..."
