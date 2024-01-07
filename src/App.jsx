@@ -11,21 +11,36 @@ export default function App() {
   const [user, setUser] = useState("");
   const [userData, setUserData] = useState(null);
   const [userNotFound, setUserNotFound] = useState(false);
+  const [inputText, setInputText] = useState("");
 
   useEffect(() => {
-    if (user !== "") {
-      async function getUser() {
-        try {
-          const response = await octokit.request(`GET /users/${user}`);
-          setUserData(response.data);
-          setUserNotFound(false);
-        } catch {
-          setUserNotFound(true);
-        }
+    async function getUser() {
+      try {
+        const response = await octokit.request(`GET /users/${user}`);
+        setUserData(response.data);
+        setUserNotFound(false);
+      } catch {
+        setUserNotFound(true);
       }
-      getUser();
+    }
+
+    if (user !== "") {
+      // debounce function
+      const delayInput = setTimeout(() => {
+        getUser();
+        console.log("Request sent");
+      }, 600);
+
+      return () => {
+        clearTimeout(delayInput);
+      };
     }
   }, [user]);
+
+  const onInput = (e) => {
+    setUser(e.target.value);
+  };
+  console.log(inputText);
 
   return (
     <div
@@ -34,10 +49,10 @@ export default function App() {
     >
       <div
         id="card-layout"
-        className="flex w-full max-w-[700px] flex-col gap-6 min-w-fit"
+        className="flex w-full min-w-fit max-w-[700px] flex-col gap-6"
       >
         <Header />
-        <Searchbar setUser={setUser} />
+        <Searchbar onInput={onInput} />
 
         {!userData && !userNotFound && <Instructions />}
         {userData && userNotFound && <ErrorMessage />}
