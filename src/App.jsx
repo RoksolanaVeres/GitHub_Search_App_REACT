@@ -11,16 +11,19 @@ export default function App() {
   const [user, setUser] = useState("");
   const [userData, setUserData] = useState(null);
   const [userNotFound, setUserNotFound] = useState(false);
-  const [inputText, setInputText] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     async function getUser() {
       try {
+        setLoading(true);
         const response = await octokit.request(`GET /users/${user}`);
         setUserData(response.data);
         setUserNotFound(false);
       } catch {
         setUserNotFound(true);
+      } finally {
+        setLoading(false);
       }
     }
 
@@ -40,7 +43,10 @@ export default function App() {
   const onInput = (e) => {
     setUser(e.target.value);
   };
-  console.log(inputText);
+
+  console.log(loading);
+
+  const shouldShowInstructions = !userData && !userNotFound;
 
   return (
     <div
@@ -54,9 +60,14 @@ export default function App() {
         <Header />
         <Searchbar onInput={onInput} />
 
-        {!userData && !userNotFound && <Instructions />}
+        {shouldShowInstructions && <Instructions />}
         {userData && userNotFound && <ErrorMessage />}
-        {userData && !userNotFound && <ResultsCard userData={userData} />}
+        {userData && !userNotFound && !loading && (
+          <ResultsCard userData={userData} />
+        )}
+        {userData && !userNotFound && loading && (
+          <div className="text-white">Loading...</div>
+        )}
       </div>
     </div>
   );
