@@ -13,12 +13,9 @@ export default function Searchbar({ onInput }) {
         onInput={onInput}
         id="textInput"
         type="search"
-        className="h-full w-full rounded-lg bg-transparent pl-14 pr-24"
+        className="h-full w-full rounded-lg bg-transparent pl-14 pr-4"
         placeholder="Search Github username..."
       />
-      <button className="absolute right-0 h-full rounded-lg bg-blue-500 px-3 font-bold tracking-wide hover:bg-gradient-to-b hover:from-blue-600 hover:to-yellow-500">
-        Search
-      </button>
     </div>
   );
 }

@@ -44,9 +44,10 @@ export default function App() {
     setUser(e.target.value);
   };
 
-  console.log(loading);
-
-  const shouldShowInstructions = !userData && !userNotFound;
+  const shouldShowInstructions = !userData;
+  const shouldShowErrorMessage = userNotFound;
+  const shouldShowResults = userData && !userNotFound && !loading;
+  const shouldShowLoading = userData && loading;
 
   return (
     <div
@@ -61,13 +62,9 @@ export default function App() {
         <Searchbar onInput={onInput} />
 
         {shouldShowInstructions && <Instructions />}
-        {userData && userNotFound && <ErrorMessage />}
-        {userData && !userNotFound && !loading && (
-          <ResultsCard userData={userData} />
-        )}
-        {userData && !userNotFound && loading && (
-          <div className="text-white">Loading...</div>
-        )}
+        {shouldShowErrorMessage && <ErrorMessage />}
+        {shouldShowLoading && <div className="text-white">Loading...</div>}
+        {shouldShowResults && <ResultsCard userData={userData} />}
       </div>
     </div>
   );
